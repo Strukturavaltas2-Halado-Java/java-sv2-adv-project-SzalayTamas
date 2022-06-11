@@ -26,9 +26,11 @@ public class CustomerDetailsService {
     private InvoiceRepository invoiceRepository;
     private MapperToDto mapper;
 
+    @Transactional
     public List<CustomerDto> findAllCustomer() {
         return mapper.toCustomerDto(customerRepository.findAll());
     }
+//    public List<CustomerDto>
 
     @Transactional
     public void addMeterToCustomerByUserId(Meter meter, Long id) {
@@ -69,5 +71,9 @@ public class CustomerDetailsService {
 
     public List<MeterDto> findMetersByCustomerId(Long id) {
         return mapper.toMeterDto(meterRepository.findAllByCustomerId(id));
+    }
+
+    public List<CustomerDto> findAllWithInvoice() {
+        return mapper.toCustomerDto(customerRepository.findAllWithInvoice());
     }
 }

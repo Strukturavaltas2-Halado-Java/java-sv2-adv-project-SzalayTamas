@@ -82,4 +82,10 @@ public class BillingMeterService {
         meter.addMeasurement(new Measurement(command.getDateOfMeasurement(), command.getMeterStartingUsedElectricity()));
         return mapper.toMeterDto(meterRepository.save(meter));
     }
+
+    @Transactional
+    public List<MeterDto> findAllMeters() {
+        return mapper.toMeterDto(meterRepository.findAllMeterWithMeasurements());
+//        return mapper.toMeterDto(meterRepository.findAll());
+    }
 }

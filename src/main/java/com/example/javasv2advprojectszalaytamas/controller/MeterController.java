@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/meter")
@@ -26,4 +27,9 @@ public class MeterController {
         return billingMeterService.createMeterForCustomerById(id,command);
     }
 
+    @GetMapping
+    @Operation(description = "return with all meters from database")
+    public List<MeterDto> findAllMeters(){
+        return billingMeterService.findAllMeters();
+    }
 }

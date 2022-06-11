@@ -2,3 +2,11 @@ GET http://localhost:8080/api/invoice
 Accept: application/json
 
 ###
+GET http://localhost:8080/api/customer
+Accept: application/json
+
+###
+GET http://localhost:8080/api/meter
+Accept: application/json
+
+###

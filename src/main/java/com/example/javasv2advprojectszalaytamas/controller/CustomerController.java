@@ -28,7 +28,8 @@ public class CustomerController {
     @GetMapping
     @Operation(summary = "will return with all user", description = "will return with all user")
     public List<CustomerDto> findAllUser() {
-        return customerDetailsService.findAllCustomer();
+        return customerDetailsService.findAllWithInvoice();
+//        return customerDetailsService.findAllCustomer();
     }
 
     @PostMapping

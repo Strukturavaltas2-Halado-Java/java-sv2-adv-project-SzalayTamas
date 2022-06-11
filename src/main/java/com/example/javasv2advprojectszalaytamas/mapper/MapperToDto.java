@@ -39,6 +39,8 @@ public interface MapperToDto {
     }
 
     default Long createIdFromCustomer(Customer customer) {
+        if (customer == null)
+            return null;
         return customer.getId();
     }
 }
