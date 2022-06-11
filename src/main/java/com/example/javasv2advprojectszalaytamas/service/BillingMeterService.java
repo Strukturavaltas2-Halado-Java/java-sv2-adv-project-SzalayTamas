@@ -75,6 +75,9 @@ public class BillingMeterService {
     public MeterDto createMeterForCustomerById(Long id, CreateMeterCommand command) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
         Meter meter = new Meter();
+        if (customer.getMeter() != null) {
+            customer.getMeter().setCustomer(null);
+        }
         meter.setCustomer(customer);
         meter.addMeasurement(new Measurement(command.getDateOfMeasurement(), command.getMeterStartingUsedElectricity()));
         return mapper.toMeterDto(meterRepository.save(meter));

@@ -5,6 +5,7 @@ import com.example.javasv2advprojectszalaytamas.command.update.UpdateInvoiceComm
 import com.example.javasv2advprojectszalaytamas.dto.InvoiceDto;
 import com.example.javasv2advprojectszalaytamas.service.BillingMeterService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/invoice")
 @Tag(name = "Operation on invoice Entity")
+@AllArgsConstructor
 public class InvoiceController {
     private BillingMeterService billingMeterService;
 

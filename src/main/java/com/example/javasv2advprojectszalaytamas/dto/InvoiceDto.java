@@ -3,6 +3,8 @@ package com.example.javasv2advprojectszalaytamas.dto;
 import com.example.javasv2advprojectszalaytamas.entity.Customer;
 import com.example.javasv2advprojectszalaytamas.entity.Meter;
 import com.example.javasv2advprojectszalaytamas.entity.Status;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +20,10 @@ public class InvoiceDto {
     @Schema(description = "Unique identifier of the invoice", example = "1")
     private Long id;
     @Schema(description = "The invoice belongs to this meter")
-    private MeterDto meters;
+    private Long meter;
     @Schema(description = "The invoice belongs to this customer ")
-    private CustomerDto customer;
+    @JsonIgnoreProperties("invoices")
+    private long customer;
     @Schema(description = "The customer is getting billed for that amount of electricity", example = "13")
     private double usedElectricity;
     @Schema(description = "Shows the invoice status can be pending or paid")

@@ -15,7 +15,7 @@ public class MeterDto {
     @Schema(description = "Unique identifier of the meter" , example = "1")
     private Long id;
     @Schema(description = "The meter belongs to this user")
-    private CustomerDto customer;
+    private Long customer;
     @Schema(description = "List of used electricity measurements with dates")
     private List<Measurement> measurements;
 }

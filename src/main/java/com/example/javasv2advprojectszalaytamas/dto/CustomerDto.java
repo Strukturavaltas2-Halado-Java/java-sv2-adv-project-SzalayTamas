@@ -17,11 +17,11 @@ public class CustomerDto {
     @Schema(description = "Unique identifier of the user", example = "1")
     private Long id;
     @Schema(description = "Meter that follow the customers electricity usage ")
-    private MeterDto meter;
+    private Long meter;
     @Schema(description = "Balance of the user,negative on debt,positive on overpay", example = "-124")
     private double balance;
     @Schema(description = "List of created invoices for that customer")
-    private List<InvoiceDto> invoices;
+    private List<Long> invoices;
     @Schema(description = "Contact details of user")
     private ContactDto contact;
     @Schema(description = "The amount of money the user will get billed for consumed electricity per watt", example = "100")

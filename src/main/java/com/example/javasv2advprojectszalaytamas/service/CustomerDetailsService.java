@@ -32,7 +32,6 @@ public class CustomerDetailsService {
 
     @Transactional
     public void addMeterToCustomerByUserId(Meter meter, Long id) {
-//        Customer customer = customerRepository.findByIdWithMeter(id);
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
         customer.getMeter().setCustomer(null);
         customerRepository.flush();

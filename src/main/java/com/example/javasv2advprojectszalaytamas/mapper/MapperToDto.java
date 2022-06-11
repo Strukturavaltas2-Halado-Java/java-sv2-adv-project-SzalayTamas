@@ -9,6 +9,7 @@ import com.example.javasv2advprojectszalaytamas.entity.Invoice;
 import com.example.javasv2advprojectszalaytamas.entity.Meter;
 import com.example.javasv2advprojectszalaytamas.entity.Customer;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -28,4 +29,16 @@ public interface MapperToDto {
     List<InvoiceDto> toInvoiceDto(List<Invoice> invoices);
 
     Contact createContact(CreateCustomerCommand command);
+
+    default Long createIdFromInvoice(Invoice invoice) {
+        return invoice.getId();
+    }
+
+    default Long createIdFromMeter(Meter meter) {
+        return meter.getId();
+    }
+
+    default Long createIdFromCustomer(Customer customer) {
+        return customer.getId();
+    }
 }
