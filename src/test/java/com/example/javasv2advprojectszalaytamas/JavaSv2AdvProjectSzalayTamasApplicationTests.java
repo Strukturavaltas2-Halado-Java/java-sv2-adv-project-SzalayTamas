@@ -3,15 +3,14 @@ package com.example.javasv2advprojectszalaytamas;
 import com.example.javasv2advprojectszalaytamas.entity.*;
 import com.example.javasv2advprojectszalaytamas.repositori.InvoiceRepository;
 import com.example.javasv2advprojectszalaytamas.repositori.MeterRepository;
-import com.example.javasv2advprojectszalaytamas.repositori.UserRepository;
-import com.example.javasv2advprojectszalaytamas.service.UserDetailsService;
+import com.example.javasv2advprojectszalaytamas.repositori.CustomerRepository;
+import com.example.javasv2advprojectszalaytamas.service.CustomerDetailsService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
@@ -20,13 +19,13 @@ import java.time.LocalDateTime;
 class JavaSv2AdvProjectSzalayTamasApplicationTests {
 
     @Autowired
-    UserRepository userRepository;
+    CustomerRepository customerRepository;
     @Autowired
     MeterRepository meterRepository;
     @Autowired
     InvoiceRepository invoiceRepository;
     @Autowired
-    UserDetailsService userDetailsService;
+    CustomerDetailsService customerDetailsService;
 
     @Test
     void contextLoads() {
@@ -46,28 +45,31 @@ class JavaSv2AdvProjectSzalayTamasApplicationTests {
         contact.setAddress("Jo utca 12");
         contact.setEmail("Semmi@Semmi.com");
         contact.setTown("Budapest");
-        contact.setPhoneNumbers("36205278601");
+        contact.setPhoneNumber("36205278601");
         contact.setZipCode("ZipCode");
-        User user = new User();
-        user.setPricePerKiloWatt(1_000);
-        user.setContact(contact);
+        Customer customer = new Customer();
+        customer.setPricePerKiloWatt(1_000);
+        customer.setContact(contact);
         Meter meter = new Meter();
         Measurement measurement = new Measurement();
         measurement.setDateOfMeasurement(LocalDateTime.now());
         measurement.setUsedElectricity(1337);
         meter.addMeasurement(measurement);
-        user.addMeter(meter);
+
+        customer.addMeter(meter);
         Invoice invoice = new Invoice();
         invoice.setMeter(meter);
         invoice.setStatus(Status.Pending);
         invoice.setDateOfInvoiceCreation(LocalDateTime.now());
         invoice.setUsedElectricity(measurement.getUsedElectricity());
-        invoice.setDebt(user.getPricePerKiloWatt()*measurement.getUsedElectricity());
-        user.addInvoice(invoice);
-        user.setBalance(invoice.getDebt()*-1);
-        userRepository.save(user);
+        invoice.setDebt(customer.getPricePerKiloWatt()*measurement.getUsedElectricity());
+        invoice.setPricePerKiloWatt(customer.getPricePerKiloWatt());
+        customer.addInvoice(invoice);
+        customer.setBalance(invoice.getDebt()*-1);
+        customerRepository.save(customer);
         meterRepository.save(meter);
         invoiceRepository.save(invoice);
+        customerDetailsService.addMeterToCustomerByUserId(new Meter(),customer.getId());
     }
 
     @Test

@@ -12,29 +12,33 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "users")
-public class User {
+@Table(name = "customers")
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+    @Column(name = "customer_id")
     private Long id;
-    @OneToMany(mappedBy = "user")
-    private List<Meter> meters = new LinkedList<>();
-    @Column(name = "user_balance")
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "customer_meter_id")
+    private Meter meter;
+    @Column(name = "customer_balance")
     private double balance;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "customer")
     private List<Invoice> invoices = new LinkedList<>();
     @Embedded
     private Contact contact;
-    @Column(name = "user_price_per_kilowatt")
+    @Column(name = "customer_price_per_kilowatt")
     private double pricePerKiloWatt;
 
-    public void addMeter(Meter meter) {
-        meters.add(meter);
-        meter.setUser(this);
-    }
     public void addInvoice(Invoice invoice){
         invoices.add(invoice);
-        invoice.setUser(this);
+        invoice.setCustomer(this);
+    }
+    public void addMeter(Meter meter){
+        this.setMeter(meter);
+        meter.setCustomer(this);
+    }
+    public Customer(Contact contact) {
+        this.contact = contact;
     }
 }

@@ -16,12 +16,17 @@ public class Meter {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "meter_id")
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @OneToOne()
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @ElementCollection
     @CollectionTable(name = "measurements", joinColumns = @JoinColumn(name = "meter_id"))
     private List<Measurement> measurements = new LinkedList<>();
+
+    public void addCustomer(Customer customer) {
+        this.setCustomer(customer);
+        customer.setMeter(this);
+    }
 
     public void addMeasurement(Measurement measurement) {
         measurements.add(measurement);

@@ -19,15 +19,17 @@ public class Invoice {
     @JoinColumn(name = "meter_id")
     private Meter meter;
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
     @Column(name = "invoice_status")
     @Enumerated(value = EnumType.STRING)
     private Status status;
-    @Column(name = "user_debt")
+    @Column(name = "customer_debt")
     private double debt;
     @Column(name = "invoice_date")
     private LocalDateTime dateOfInvoiceCreation;
-    @Column(name = "user_used_electricity")
+    @Column(name = "customer_used_electricity")
     private double usedElectricity;
+    @Column(name = "invoice_price_per_kilowatt")
+    private double pricePerKiloWatt;
 }

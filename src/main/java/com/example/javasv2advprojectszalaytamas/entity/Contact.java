@@ -1,6 +1,7 @@
 package com.example.javasv2advprojectszalaytamas.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -10,15 +11,16 @@ import javax.persistence.Table;
 @Embeddable
 @Getter
 @Setter
+@NoArgsConstructor
 public class Contact {
-    @Column(name = "user_email")
+    @Column(name = "customer_email")
     private String email;
-    @Column(name = "user_zipcode")
+    @Column(name = "customer_zipcode")
     private String zipCode;
-    @Column(name = "user_address")
+    @Column(name = "customer_address")
     private String address;
-    @Column(name = "user_town")
+    @Column(name = "customer_town")
     private String town;
-    @Column(name = "user_phone_number")
-    private String phoneNumbers;
+    @Column(name = "customer_phone_number")
+    private String phoneNumber;
 }
