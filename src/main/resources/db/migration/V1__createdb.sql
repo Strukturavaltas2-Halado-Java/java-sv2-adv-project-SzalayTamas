@@ -1,7 +1,6 @@
 CREATE TABLE customers
 (
     customer_id                 BIGINT AUTO_INCREMENT NOT NULL,
-    customer_balance            DOUBLE,
     customer_email              VARCHAR(50),
     customer_zipcode            VARCHAR(11),
     customer_town               varchar(20),
