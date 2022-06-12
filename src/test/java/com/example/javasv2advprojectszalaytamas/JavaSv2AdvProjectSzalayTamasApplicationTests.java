@@ -65,7 +65,6 @@ class JavaSv2AdvProjectSzalayTamasApplicationTests {
         invoice.setDebt(customer.getPricePerKiloWatt()*measurement.getUsedElectricity());
         invoice.setPricePerKiloWatt(customer.getPricePerKiloWatt());
         customer.addInvoice(invoice);
-        customer.setBalance(invoice.getDebt()*-1);
         customerRepository.save(customer);
         meterRepository.save(meter);
         invoiceRepository.save(invoice);
