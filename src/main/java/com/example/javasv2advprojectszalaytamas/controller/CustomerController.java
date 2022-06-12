@@ -45,7 +45,15 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "204", description = "customer has been deleted")
     public void deleteAllCustomer() {
-        customerDetailsService.deleteAllUser();
+        customerDetailsService.deleteAllCustomer();
+    }
+
+    @DeleteMapping("/{id}")
+    @Operation(summary = "delete all customer from the database")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponse(responseCode = "204", description = "customer has been deleted")
+    public void deleteCustomerById(@PathVariable("id") Long id) {
+        customerDetailsService.deleteCustomerById(id);
     }
 
     @GetMapping("/{id}")
@@ -54,28 +62,22 @@ public class CustomerController {
         return customerDetailsService.findCustomerById(id);
     }
 
-    @PutMapping("/{id}/balance")
-    @Operation(summary = "update customer balance")
-    @ApiResponse(responseCode = "200", description = "update successful")
-    public void updateCustomerDetails(@PathVariable Long id, @RequestBody UpdateCustomerCommand command) {
-        customerDetailsService.updateCustomerBalance(id, command);
-    }
-
     @PutMapping("/{id}/price")
     @Operation(summary = "update electricity price for customer")
     @ApiResponse(responseCode = "200", description = "update successful")
-    public void updateCustomersPricePerKiloWatt(@PathVariable Long id, @RequestBody UpdateCustomerCommand command) {
+    public void updateCustomersPricePerKiloWatt(@PathVariable Long id, @Valid @RequestBody UpdateCustomerCommand command) {
         customerDetailsService.updateCustomersPrice(id, command);
     }
+
     @GetMapping("/{id}/invoices")
     @Operation(summary = "return customers invoice")
-    public List<InvoiceDto> findCustomerAllInvoice(@PathVariable("id") Long id){
+    public List<InvoiceDto> findCustomerAllInvoice(@PathVariable("id") Long id) {
         return customerDetailsService.findAllInvoicesByCustomerId(id);
     }
 
     @GetMapping("/{id}/meters")
     @Operation(summary = "return customers meters")
-    public List<MeterDto> findCustomerAllMeter(@PathVariable("id") Long id){
+    public List<MeterDto> findCustomerAllMeter(@PathVariable("id") Long id) {
         return customerDetailsService.findMetersByCustomerId(id);
     }
 

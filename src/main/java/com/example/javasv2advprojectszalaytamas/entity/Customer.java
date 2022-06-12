@@ -21,8 +21,6 @@ public class Customer {
     @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "customer_meter_id")
     private Meter meter;
-    @Column(name = "customer_balance")
-    private double balance;
     @OneToMany(mappedBy = "customer")
     private List<Invoice> invoices = new LinkedList<>();
     @Embedded

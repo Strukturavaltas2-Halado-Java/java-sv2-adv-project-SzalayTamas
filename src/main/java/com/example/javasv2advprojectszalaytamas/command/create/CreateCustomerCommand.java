@@ -1,17 +1,21 @@
 package com.example.javasv2advprojectszalaytamas.command.create;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class CreateCustomerCommand {
     @NotBlank
+    @Email
     @Schema(description = "Email address of the new customer", example = "newcustomer@fastmail.com")
     private String email;
     @NotBlank
