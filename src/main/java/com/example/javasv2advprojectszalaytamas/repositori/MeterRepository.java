@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface MeterRepository extends JpaRepository<Meter, Long> {
     List<Meter> findAllByCustomerId(Long id);
-    @Query("select c from Meter c left join c.measurements")
+    @Query("select distinct c from Meter c left join c.measurements")
     List<Meter> findAllMeterWithMeasurements();
 }
