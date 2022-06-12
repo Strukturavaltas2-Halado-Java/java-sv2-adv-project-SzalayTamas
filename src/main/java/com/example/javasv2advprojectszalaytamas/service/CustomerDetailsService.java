@@ -49,14 +49,8 @@ public class CustomerDetailsService {
         return (customerRepository.save(new Customer(mapper.createContact(command)))).getId();
     }
 
-    public void deleteAllUser() {
+    public void deleteAllCustomer() {
         customerRepository.deleteAll();
-    }
-
-    @Transactional
-    public void updateCustomerBalance(Long id, UpdateCustomerCommand command) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
-        customer.setBalance(command.getBalance());
     }
 
     @Transactional
@@ -75,5 +69,9 @@ public class CustomerDetailsService {
 
     public List<CustomerDto> findAllWithInvoice() {
         return mapper.toCustomerDto(customerRepository.findAllWithInvoice());
+    }
+
+    public void deleteCustomerById(Long id) {
+        customerRepository.deleteById(id);
     }
 }
