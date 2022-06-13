@@ -45,8 +45,8 @@ public class CustomerDetailsService {
         return mapper.toCustomerDto(customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id)));
     }
 
-    public Long createNewCustomer(CreateCustomerCommand command) {
-        return (customerRepository.save(new Customer(mapper.createContact(command)))).getId();
+    public CustomerDto createNewCustomer(CreateCustomerCommand command) {
+        return mapper.toCustomerDto(customerRepository.save(new Customer(mapper.createContact(command))));
     }
 
     public void deleteAllCustomer() {

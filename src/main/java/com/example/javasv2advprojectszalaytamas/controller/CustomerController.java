@@ -36,7 +36,7 @@ public class CustomerController {
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "customer has been created")
     @Operation(summary = "Create a new customer with contact details given", description = "email address,zipcode,address,city,phone number")
-    public Long createCustomerWithContact(@Valid @RequestBody CreateCustomerCommand command) {
+    public CustomerDto createCustomerWithContact(@Valid @RequestBody CreateCustomerCommand command) {
         return customerDetailsService.createNewCustomer(command);
     }
 

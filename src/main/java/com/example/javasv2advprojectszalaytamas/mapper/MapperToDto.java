@@ -31,10 +31,14 @@ public interface MapperToDto {
     Contact createContact(CreateCustomerCommand command);
 
     default Long createIdFromInvoice(Invoice invoice) {
+        if (invoice == null)
+            return null;
         return invoice.getId();
     }
 
     default Long createIdFromMeter(Meter meter) {
+        if (meter == null)
+            return null;
         return meter.getId();
     }
 

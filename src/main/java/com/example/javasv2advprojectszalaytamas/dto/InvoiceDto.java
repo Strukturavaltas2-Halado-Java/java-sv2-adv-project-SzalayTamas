@@ -23,7 +23,7 @@ public class InvoiceDto {
     private Long meter;
     @Schema(description = "The invoice belongs to this customer ")
     @JsonIgnoreProperties("invoices")
-    private long customer;
+    private Long customer;
     @Schema(description = "The customer is getting billed for that amount of electricity", example = "13")
     private double usedElectricity;
     @Schema(description = "Shows the invoice status can be pending or paid")

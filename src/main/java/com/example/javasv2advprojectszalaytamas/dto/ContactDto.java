@@ -1,8 +1,7 @@
 package com.example.javasv2advprojectszalaytamas.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
@@ -10,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @NotBlank
+@AllArgsConstructor
+@NoArgsConstructor
 public class ContactDto {
     @Schema(description = "Email address of the customer" , example = "newcustoemr@zigzag.com")
     private String email;
