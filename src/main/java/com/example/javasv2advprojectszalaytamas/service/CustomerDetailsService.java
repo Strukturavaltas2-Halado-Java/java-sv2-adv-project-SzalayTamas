@@ -2,11 +2,13 @@ package com.example.javasv2advprojectszalaytamas.service;
 
 import com.example.javasv2advprojectszalaytamas.command.create.CreateCustomerCommand;
 import com.example.javasv2advprojectszalaytamas.command.update.UpdateCustomerCommand;
+import com.example.javasv2advprojectszalaytamas.command.update.UpdateCustomerPriceCommand;
 import com.example.javasv2advprojectszalaytamas.dto.CustomerDto;
 import com.example.javasv2advprojectszalaytamas.dto.InvoiceDto;
 import com.example.javasv2advprojectszalaytamas.dto.MeterDto;
 import com.example.javasv2advprojectszalaytamas.entity.Customer;
 import com.example.javasv2advprojectszalaytamas.entity.Meter;
+import com.example.javasv2advprojectszalaytamas.exception.CantCreateCustomerException;
 import com.example.javasv2advprojectszalaytamas.exception.CustomerNotFoundException;
 import com.example.javasv2advprojectszalaytamas.mapper.MapperToDto;
 import com.example.javasv2advprojectszalaytamas.repositori.InvoiceRepository;
@@ -26,11 +28,6 @@ public class CustomerDetailsService {
     private InvoiceRepository invoiceRepository;
     private MapperToDto mapper;
 
-    @Transactional
-    public List<CustomerDto> findAllCustomer() {
-        return mapper.toCustomerDto(customerRepository.findAll());
-    }
-//    public List<CustomerDto>
 
     @Transactional
     public void addMeterToCustomerByUserId(Meter meter, Long id) {
@@ -41,12 +38,19 @@ public class CustomerDetailsService {
         meterRepository.save(meter);
     }
 
+    @Transactional
     public CustomerDto findCustomerById(Long id) {
         return mapper.toCustomerDto(customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id)));
     }
 
     public CustomerDto createNewCustomer(CreateCustomerCommand command) {
-        return mapper.toCustomerDto(customerRepository.save(new Customer(mapper.createContact(command))));
+        if (customerRepository.findCustomerByContactContainingIgnoreCase(command.getEmail()) != null) {
+            throw new CantCreateCustomerException(command.getEmail());
+        }
+        Customer customer = new Customer((mapper.createContact(command)));
+        customer.setPricePerKiloWatt(command.getPricePerKiloWatt());
+        System.out.println(customer);
+        return mapper.toCustomerDto(customerRepository.save(customer));
     }
 
     public void deleteAllCustomer() {
@@ -54,7 +58,7 @@ public class CustomerDetailsService {
     }
 
     @Transactional
-    public void updateCustomersPrice(Long id, UpdateCustomerCommand command) {
+    public void updateCustomersPrice(Long id, UpdateCustomerPriceCommand command) {
         Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
         customer.setPricePerKiloWatt(command.getPricePerKiloWatt());
     }
@@ -63,9 +67,6 @@ public class CustomerDetailsService {
         return mapper.toInvoiceDto(invoiceRepository.findAllByCustomerId(id));
     }
 
-    public List<MeterDto> findMetersByCustomerId(Long id) {
-        return mapper.toMeterDto(meterRepository.findAllByCustomerId(id));
-    }
 
     public List<CustomerDto> findAllWithInvoice() {
         return mapper.toCustomerDto(customerRepository.findAllWithInvoice());
@@ -73,5 +74,12 @@ public class CustomerDetailsService {
 
     public void deleteCustomerById(Long id) {
         customerRepository.deleteById(id);
+    }
+
+    @Transactional
+    public void updateCustomerContactDetails(Long id, UpdateCustomerCommand command) {
+        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
+        customer.getContact().setPhoneNumber(command.getPhoneNumber());
+        customer.getContact().setEmail(command.getEmail());
     }
 }

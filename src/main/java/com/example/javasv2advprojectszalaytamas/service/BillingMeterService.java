@@ -2,15 +2,13 @@ package com.example.javasv2advprojectszalaytamas.service;
 
 import com.example.javasv2advprojectszalaytamas.command.create.CreateInvoiceCommand;
 import com.example.javasv2advprojectszalaytamas.command.create.CreateMeterCommand;
-import com.example.javasv2advprojectszalaytamas.command.update.UpdateInvoiceCommand;
+import com.example.javasv2advprojectszalaytamas.command.create.CreateMeterMeasurementCommand;
+import com.example.javasv2advprojectszalaytamas.command.update.UpdateInvoiceStatusCommand;
 import com.example.javasv2advprojectszalaytamas.command.update.UpdateMeterCommand;
 import com.example.javasv2advprojectszalaytamas.dto.InvoiceDto;
 import com.example.javasv2advprojectszalaytamas.dto.MeterDto;
 import com.example.javasv2advprojectszalaytamas.entity.*;
-import com.example.javasv2advprojectszalaytamas.exception.CantCreateInvoiceException;
-import com.example.javasv2advprojectszalaytamas.exception.CustomerNotFoundException;
-import com.example.javasv2advprojectszalaytamas.exception.InvoiceNotFoundException;
-import com.example.javasv2advprojectszalaytamas.exception.MeterNotFoundException;
+import com.example.javasv2advprojectszalaytamas.exception.*;
 import com.example.javasv2advprojectszalaytamas.mapper.MapperToDto;
 import com.example.javasv2advprojectszalaytamas.repositori.InvoiceRepository;
 import com.example.javasv2advprojectszalaytamas.repositori.MeterRepository;
@@ -19,10 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -37,51 +32,9 @@ public class BillingMeterService {
     public List<InvoiceDto> findAllInvoice() {
         return mapper.toInvoiceDto(invoiceRepository.findAll());
     }
-
     @Transactional
-    public InvoiceDto createInvoiceByCustomerId(CreateInvoiceCommand command) {
-        Customer customer = customerRepository.findById(command.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(command.getCustomerId()));
-
-        return mapper.toInvoiceDto(billCustomer(customer, command));
-    }
-
-
-    private Invoice billCustomer(Customer customer, CreateInvoiceCommand command) {
-        Invoice invoice = new Invoice();
-        return billCustomer(invoice, customer, command.getUsedElectricity());
-    }
-
-    @Transactional
-    public InvoiceDto createInvoiceFromUsage(Long id) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
-        Measurement lastMeasurement = customer.getMeter().getMeasurements().stream().sorted(Comparator.comparing(Measurement::getDateOfMeasurement)).toList().get(0);
-        Invoice lastInvoice = customer.getInvoices().stream().sorted(Comparator.comparing(Invoice::getDateOfInvoiceCreation)).toList().get(0);
-        if (lastMeasurement.getDateOfMeasurement().isBefore(lastInvoice.getDateOfInvoiceCreation())) {
-            throw new CantCreateInvoiceException(customer.getId());
-        }
-        return mapper.toInvoiceDto(billBasedOnUsage(customer, lastInvoice, lastMeasurement));
-    }
-
-    private Invoice billBasedOnUsage(Customer customer, Invoice lastInvoice, Measurement lastMeasurement) {
-        Invoice newInvoice = new Invoice();
-        double usedElectricity = (lastInvoice.getUsedElectricity() - lastMeasurement.getUsedElectricity());
-        return billCustomer(newInvoice, customer, usedElectricity);
-
-    }
-
-    private Invoice billCustomer(Invoice newInvoice, Customer customer, double usedElectricity) {
-        newInvoice.setPricePerKiloWatt(customer.getPricePerKiloWatt());
-        newInvoice.setMeter(customer.getMeter());
-        newInvoice.setDebt(customer.getPricePerKiloWatt() * usedElectricity);
-        newInvoice.setDateOfInvoiceCreation(LocalDateTime.now());
-        newInvoice.setStatus(Status.Pending);
-        newInvoice.setCustomer(customer);
-        return invoiceRepository.save(newInvoice);
-    }
-
-    @Transactional
-    public MeterDto createMeterForCustomerById(Long id, CreateMeterCommand command) {
-        Customer customer = customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
+    public MeterDto createMeterForCustomerById(CreateMeterCommand command) {
+        Customer customer = customerRepository.findById(command.getUserId()).orElseThrow(() -> new CustomerNotFoundException(command.getUserId()));
         Meter meter = new Meter();
         if (customer.getMeter() != null) {
             customer.getMeter().setCustomer(null);
@@ -95,14 +48,6 @@ public class BillingMeterService {
     public List<MeterDto> findAllMeters() {
         return mapper.toMeterDto(meterRepository.findAllMeterWithMeasurements());
 //        return mapper.toMeterDto(meterRepository.findAll());
-    }
-
-
-    @Transactional
-    public Long updatePriceForCustomerInvoice(UpdateInvoiceCommand command) {
-        Invoice invoice = invoiceRepository.findById(command.getCustomerId()).orElseThrow(() -> new InvoiceNotFoundException(command.getCustomerId()));
-        invoice.setPricePerKiloWatt(command.getPricePerKiloWatt());
-        return invoice.getId();
     }
 
     public void deleteAllInvoice() {
@@ -122,18 +67,62 @@ public class BillingMeterService {
     }
 
     @Transactional
-    public Long updateDebtInInvoice(UpdateInvoiceCommand command) {
-        Invoice invoice = invoiceRepository.findById(command.getInvoiceId()).orElseThrow(() -> new InvoiceNotFoundException(command.getInvoiceId()));
-        invoice.setDebt(command.getDebt());
+    public Long updateStatusOfTheInvoice(Long id, UpdateInvoiceStatusCommand command) {
+        Invoice invoice = invoiceRepository.findById(id).orElseThrow(() -> new InvoiceNotFoundException(id));
+        invoice.setStatus(parseStatus(command));
         return invoice.getId();
     }
 
+    private Status parseStatus(UpdateInvoiceStatusCommand command) {
+        if (command.getStatus().equals(Status.Pending.toString())) {
+            return Status.Pending;
+        } else if (command.getStatus().equals(Status.Paid.toString())) {
+            return Status.Paid;
+        }
+        throw new IllegalInvoiceStatusException(command.getStatus());
+    }
+
     @Transactional
-    public Long updateMeterUser(Long id, UpdateMeterCommand command) {
+    public InvoiceDto createInvoiceByCustomerId(CreateInvoiceCommand command) {
+        Customer customer = customerRepository.findById(command.getCustomerId()).orElseThrow(
+                () -> new CustomerNotFoundException(command.getCustomerId()));
+        Invoice invoice = new Invoice();
+        setInvoice(invoice, customer, command);
+        return mapper.toInvoiceDto(invoiceRepository.save(invoice));
+    }
+
+    private void setInvoice(Invoice invoice, Customer customer, CreateInvoiceCommand command) {
+        invoice.setCustomer(customer);
+        invoice.setMeter(customer.getMeter());
+        invoice.setBilled_electricity(command.getUsedElectricity());
+        invoice.setDebt(customer.getPricePerKiloWatt() * command.getUsedElectricity());
+        invoice.setPricePerKiloWatt(customer.getPricePerKiloWatt());
+        invoice.setStatus(Status.Pending);
+        invoice.setDateOfInvoiceCreation(LocalDateTime.now());
+    }
+
+    public InvoiceDto findInvoiceById(Long id) {
+        return mapper.toInvoiceDto(invoiceRepository.findById(id).orElseThrow(() -> new InvoiceNotFoundException(id)));
+    }
+
+    @Transactional
+    public MeterDto findMeterById(Long id) {
+        return mapper.toMeterDto(meterRepository.findById(id).orElseThrow(() -> new MeterNotFoundException(id)));
+    }
+
+    @Transactional
+    public MeterDto createMeterMeasurement(Long id, CreateMeterMeasurementCommand command) {
         Meter meter = meterRepository.findById(id).orElseThrow(() -> new MeterNotFoundException(id));
-        Customer customer = customerRepository.
-                findById(command.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException(command.getCustomerId()));
-        meter.addCustomer(customer);
-        return meter.getId();
+        validateMeasurement(meter, command);
+        meter.addMeasurement(new Measurement(command.getDateOfMeasurement(), command.getUsedElectricity()));
+        return mapper.toMeterDto(meter);
+    }
+
+    private void validateMeasurement(Meter meter, CreateMeterMeasurementCommand command) {
+        double highestMeasurement = meter.getMeasurements().stream().map(e -> e.getUsedElectricity()).sorted(Comparator.reverseOrder()).findFirst().orElse(0D);
+        LocalDateTime latestMeasurement = meter.getMeasurements().stream().map(e -> e.getDateOfMeasurement()).sorted(Comparator.reverseOrder()).findFirst().orElse(LocalDateTime.MIN);
+        if (highestMeasurement > command.getUsedElectricity() || latestMeasurement.isAfter(command.getDateOfMeasurement())) {
+            throw new IllegalMeasurementException();
+        }
     }
 }
