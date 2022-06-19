@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @Getter
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 public class CreateMeterCommand {
 
     @Schema(description = "Create meter for this user", example = "1")
-    @NotBlank
+    @NotNull
     private Long userId;
     @Schema(description = "The date of deploying the meter for user", example = "2022-06-10T16:15:39.9627303")
     private LocalDateTime dateOfMeasurement;

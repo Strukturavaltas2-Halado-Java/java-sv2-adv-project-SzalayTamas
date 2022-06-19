@@ -12,6 +12,6 @@ import javax.validation.constraints.NotBlank;
 @Setter
 public class DeleteCustomerCommand {
     @NotBlank
-    @Schema(description = "id of customer to delete")
+    @Schema(description = "id of customer to delete", example = "1")
     private long customerId;
 }

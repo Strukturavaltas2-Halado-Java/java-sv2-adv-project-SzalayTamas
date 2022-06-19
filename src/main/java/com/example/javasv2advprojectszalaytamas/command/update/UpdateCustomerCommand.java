@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 
 @Getter
@@ -14,8 +16,11 @@ import javax.validation.constraints.Positive;
 @NoArgsConstructor
 public class UpdateCustomerCommand {
 
-    private ContactDto contact;
-    @Positive
-    private double pricePerKiloWatt;
-
+    @NotBlank
+    @Email
+    @Schema(description = "Email address of the new customer", example = "newcustomer@fastmail.com")
+    private String email;
+    @NotBlank
+    @Schema(description = "Phone number of the customer", example = "867895124")
+    private String phoneNumber;
 }

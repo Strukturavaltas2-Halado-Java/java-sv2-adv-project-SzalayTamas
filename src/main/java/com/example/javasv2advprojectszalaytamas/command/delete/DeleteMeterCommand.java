@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 public class DeleteMeterCommand {
-    @Schema(description = "id of meter to delete")
+    @Schema(description = "id of meter to delete", example = "1")
     @NotBlank
     private Long meterId;
 }

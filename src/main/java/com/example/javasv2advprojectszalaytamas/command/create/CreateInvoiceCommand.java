@@ -6,16 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class CreateInvoiceCommand {
-        @NotBlank
-        @Schema(description = "Create a new invoice for the customer with that id")
+        @NotNull
+        @Schema(description = "Create a new invoice for the customer with that id", example = "1")
         private Long customerId;
-        @Schema(description = "Used electricity for the new invoice")
+        @Schema(description = "Used electricity for the new invoice", example = "200")
         @Positive
         private double usedElectricity;
 }
