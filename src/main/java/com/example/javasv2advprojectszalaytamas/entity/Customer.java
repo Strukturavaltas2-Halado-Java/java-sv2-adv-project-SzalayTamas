@@ -3,6 +3,7 @@ package com.example.javasv2advprojectszalaytamas.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.LinkedList;
@@ -13,13 +14,13 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @Table(name = "customers")
+@ToString
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Long id;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "customer_meter_id")
+    @OneToOne(cascade = CascadeType.PERSIST , mappedBy = "customer")
     private Meter meter;
     @OneToMany(mappedBy = "customer")
     private List<Invoice> invoices = new LinkedList<>();
