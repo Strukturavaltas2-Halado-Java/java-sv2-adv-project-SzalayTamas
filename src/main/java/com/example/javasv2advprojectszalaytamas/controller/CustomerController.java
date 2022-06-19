@@ -2,6 +2,7 @@ package com.example.javasv2advprojectszalaytamas.controller;
 
 import com.example.javasv2advprojectszalaytamas.command.create.CreateCustomerCommand;
 import com.example.javasv2advprojectszalaytamas.command.update.UpdateCustomerCommand;
+import com.example.javasv2advprojectszalaytamas.command.update.UpdateCustomerPriceCommand;
 import com.example.javasv2advprojectszalaytamas.dto.CustomerDto;
 import com.example.javasv2advprojectszalaytamas.dto.InvoiceDto;
 import com.example.javasv2advprojectszalaytamas.dto.MeterDto;
@@ -35,7 +36,7 @@ public class CustomerController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponse(responseCode = "201", description = "customer has been created")
-    @Operation(summary = "Create a new customer with contact details given", description = "email address,zipcode,address,city,phone number")
+    @Operation(summary = "Create a new customer with contact details given and with the prices for this customer", description = "email address,zipcode,address,city,phone number,electricity price")
     public CustomerDto createCustomerWithContact(@Valid @RequestBody CreateCustomerCommand command) {
         return customerDetailsService.createNewCustomer(command);
     }
@@ -49,12 +50,13 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    @Operation(summary = "delete all customer from the database")
+    @Operation(summary = "delete a customer from the database")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponse(responseCode = "204", description = "customer has been deleted")
     public void deleteCustomerById(@PathVariable("id") Long id) {
         customerDetailsService.deleteCustomerById(id);
     }
+
 
     @GetMapping("/{id}")
     @Operation(summary = "will find and return a customer by id", description = "find a customer by id and return with it")
@@ -65,8 +67,14 @@ public class CustomerController {
     @PutMapping("/{id}/price")
     @Operation(summary = "update electricity price for customer")
     @ApiResponse(responseCode = "200", description = "update successful")
-    public void updateCustomersPricePerKiloWatt(@PathVariable Long id, @Valid @RequestBody UpdateCustomerCommand command) {
+    public void updateCustomersPricePerKiloWatt(@PathVariable Long id, @Valid @RequestBody UpdateCustomerPriceCommand command) {
         customerDetailsService.updateCustomersPrice(id, command);
+    }
+    @PutMapping("/{id}/contact")
+    @Operation(summary = "update contacts for customer", description = "can update email address and phone numbers")
+    @ApiResponse(responseCode = "200", description = "update successful")
+    public void updateCustomerContactDetails(@PathVariable Long id, @Valid @RequestBody UpdateCustomerCommand command) {
+        customerDetailsService.updateCustomerContactDetails(id, command);
     }
 
     @GetMapping("/{id}/invoices")
@@ -74,12 +82,4 @@ public class CustomerController {
     public List<InvoiceDto> findCustomerAllInvoice(@PathVariable("id") Long id) {
         return customerDetailsService.findAllInvoicesByCustomerId(id);
     }
-
-    @GetMapping("/{id}/meters")
-    @Operation(summary = "return customers meters")
-    public List<MeterDto> findCustomerAllMeter(@PathVariable("id") Long id) {
-        return customerDetailsService.findMetersByCustomerId(id);
-    }
-
-
 }

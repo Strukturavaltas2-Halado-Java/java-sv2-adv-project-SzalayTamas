@@ -1,7 +1,7 @@
 package com.example.javasv2advprojectszalaytamas.controller;
 
 import com.example.javasv2advprojectszalaytamas.command.create.CreateInvoiceCommand;
-import com.example.javasv2advprojectszalaytamas.command.update.UpdateInvoiceCommand;
+import com.example.javasv2advprojectszalaytamas.command.update.UpdateInvoiceStatusCommand;
 import com.example.javasv2advprojectszalaytamas.dto.InvoiceDto;
 import com.example.javasv2advprojectszalaytamas.service.BillingMeterService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,11 +33,10 @@ public class InvoiceController {
         return billingMeterService.createInvoiceByCustomerId(command);
     }
 
-    @PostMapping("/customer/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
-    @Operation(summary = "Create an invoice for customer based on the last measurement on the meter")
-    public InvoiceDto createInvoiceBasedOnMeasuredElectricityUsage(@PathVariable("id") Long id) {
-        return billingMeterService.createInvoiceFromUsage(id);
+    @GetMapping("/{id}")
+    @Operation(summary = "will find an invoice by its id")
+    public InvoiceDto findInvoiceById(@PathVariable("id") Long id) {
+        return billingMeterService.findInvoiceById(id);
     }
 
     @DeleteMapping
@@ -56,17 +55,10 @@ public class InvoiceController {
         billingMeterService.deleteInvoiceById(id);
     }
 
-    @PutMapping("/price")
-    @Operation(summary = "Update the price for electricity in the invoice for customer ")
+    @PutMapping("/{id}/status")
+    @Operation(summary = "Update the status of the Invoice Can be Pending or Paid ")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public Long updatePriceForCustomerInvoice(@Valid @RequestBody UpdateInvoiceCommand command) {
-        return billingMeterService.updatePriceForCustomerInvoice(command);
-    }
-
-    @PutMapping("/debt")
-    @Operation(summary = "Update the debt in the invoice for customer ")
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Long updateDebtForCustomerInvoice(@Valid @RequestBody UpdateInvoiceCommand command) {
-        return billingMeterService.updateDebtInInvoice(command);
+    public Long updatePriceForCustomerInvoice(@PathVariable("id") Long id, @Valid @RequestBody UpdateInvoiceStatusCommand command) {
+        return billingMeterService.updateStatusOfTheInvoice(id, command);
     }
 }
