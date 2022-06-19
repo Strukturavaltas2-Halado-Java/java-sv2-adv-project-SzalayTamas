@@ -7,7 +7,7 @@ CREATE TABLE customers
     customer_address            VARCHAR(150),
     customer_phone_number       varchar(15),
     customer_price_per_kilowatt DOUBLE,
-    customer_meter_id           BIGINT,
+#     customer_meter_id           BIGINT,
     PRIMARY KEY (customer_id)
 );
 CREATE TABLE meters
@@ -23,10 +23,10 @@ CREATE TABLE invoices
     meter_id                   BIGINT                NOT NULL,
     customer_id                BIGINT                NOT NULL,
     customer_debt              DOUBLE,
-    customer_used_electricity  DOUBLE,
     invoice_status             VARCHAR(10),
     invoice_date               DATETIME,
     invoice_price_per_kilowatt DOUBLE,
+    invoice_billed_electricity DOUBLE,
     PRIMARY KEY (invoice_id)
 );
 
