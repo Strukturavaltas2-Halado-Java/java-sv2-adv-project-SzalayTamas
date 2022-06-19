@@ -1,7 +1,9 @@
 package com.example.javasv2advprojectszalaytamas.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Table(name = "invoices")
+@NoArgsConstructor
+@ToString
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +32,13 @@ public class Invoice {
     private double debt;
     @Column(name = "invoice_date")
     private LocalDateTime dateOfInvoiceCreation;
-    @Column(name = "customer_used_electricity")
-    private double usedElectricity;
     @Column(name = "invoice_price_per_kilowatt")
     private double pricePerKiloWatt;
+    @Column(name = "invoice_billed_electricity")
+    private double billed_electricity;
+
+    public Invoice(LocalDateTime dateOfInvoiceCreation, double usedElectricity) {
+        this.dateOfInvoiceCreation = dateOfInvoiceCreation;
+        this.billed_electricity = usedElectricity;
+    }
 }
