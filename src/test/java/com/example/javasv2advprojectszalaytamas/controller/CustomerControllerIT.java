@@ -27,7 +27,7 @@ class CustomerControllerIT {
         webTestClient
                 .post()
                 .uri("api/customer")
-                .bodyValue(new CreateCustomerCommand("EmailAddress@Gmail.com", "ZipCode123", "Szondy street 162", "Budapest", "062012345678"))
+                .bodyValue(new CreateCustomerCommand("EmailAddress@Gmail.com", "ZipCode123", "Szondy street 162", "Budapest", "062012345678", 1200))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody(CustomerDto.class).value(e -> assertThat(e.getContact().getEmail()).isEqualTo("EmailAddress@Gmail.com")
@@ -40,7 +40,7 @@ class CustomerControllerIT {
         webTestClient
                 .post()
                 .uri("api/customer")
-                .bodyValue(new CreateCustomerCommand("", "ZipCode123", "Szondy street 162", "Budapest", "062012345678"))
+                .bodyValue(new CreateCustomerCommand("", "ZipCode123", "Szondy street 162", "Budapest", "062012345678",1000))
                 .exchange()
                 .expectStatus().isBadRequest();
     }
