@@ -10,6 +10,6 @@ public class MeterNotFoundException extends AbstractThrowableProblem {
         super(URI.create("meter/meter-not-found"),
                 "Not Found",
                 Status.NOT_FOUND,
-                String.format("Invoice not found, id: %d", id));
+                String.format("meter not found, id: %d", id));
     }
 }
