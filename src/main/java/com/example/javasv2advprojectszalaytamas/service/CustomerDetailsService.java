@@ -43,13 +43,13 @@ public class CustomerDetailsService {
         return mapper.toCustomerDto(customerRepository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id)));
     }
 
+    @Transactional
     public CustomerDto createNewCustomer(CreateCustomerCommand command) {
-        if (customerRepository.findCustomerByContactContainingIgnoreCase(command.getEmail()) != null) {
+        if (customerRepository.findCustomerByContactContainingIgnoreCase(command.getEmail()).isPresent()) {
             throw new CantCreateCustomerException(command.getEmail());
         }
         Customer customer = new Customer((mapper.createContact(command)));
         customer.setPricePerKiloWatt(command.getPricePerKiloWatt());
-        System.out.println(customer);
         return mapper.toCustomerDto(customerRepository.save(customer));
     }
 

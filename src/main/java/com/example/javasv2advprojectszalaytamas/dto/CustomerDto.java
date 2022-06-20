@@ -18,8 +18,6 @@ public class CustomerDto {
     private Long id;
     @Schema(description = "Meter that follow the customers electricity usage ")
     private Long meter;
-    @Schema(description = "Balance of the user,negative on debt,positive on overpay", example = "-124")
-    private double balance;
     @Schema(description = "List of created invoices for that customer")
     private List<Long> invoices;
     @Schema(description = "Contact details of user")

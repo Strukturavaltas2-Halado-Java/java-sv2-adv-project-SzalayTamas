@@ -28,6 +28,8 @@ public class InvoiceController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponse(responseCode = "201", description = "invoice has been created")
     @Operation(summary = "Create an invoice for a customer by id and used electricity given.")
     public InvoiceDto createInvoiceByCustomerId(@Valid @RequestBody CreateInvoiceCommand command) {
         return billingMeterService.createInvoiceByCustomerId(command);
@@ -58,6 +60,7 @@ public class InvoiceController {
     @PutMapping("/{id}/status")
     @Operation(summary = "Update the status of the Invoice Can be Pending or Paid ")
     @ResponseStatus(HttpStatus.ACCEPTED)
+    @ApiResponse(responseCode = "200", description = "update successful")
     public Long updatePriceForCustomerInvoice(@PathVariable("id") Long id, @Valid @RequestBody UpdateInvoiceStatusCommand command) {
         return billingMeterService.updateStatusOfTheInvoice(id, command);
     }

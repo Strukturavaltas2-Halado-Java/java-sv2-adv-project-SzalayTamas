@@ -31,6 +31,8 @@ public class MeterController {
 
     @PostMapping("/{id}")
     @Operation(summary = "Add a new Measurement to a meter")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponse(responseCode = "201", description = "meter has been created")
     public MeterDto createNewMeterForCustomerById(@PathVariable("id") Long id, @Valid @RequestBody CreateMeterMeasurementCommand command) {
         return billingMeterService.createMeterMeasurement(id, command);
     }

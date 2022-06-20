@@ -15,5 +15,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     List<Customer> findAllWithInvoice();
 
 
+    @Query("select distinct c FROM  Customer c where  c.contact.email= :email")
     Optional<Customer> findCustomerByContactContainingIgnoreCase(String email);
 }

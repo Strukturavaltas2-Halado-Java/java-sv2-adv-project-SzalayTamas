@@ -32,44 +32,39 @@ class JavaSv2AdvProjectSzalayTamasApplicationTests {
 
     }
 
-    @Order(1)
-    @Test
-    void testUserRepo() {
 
-    }
-
-    @Order(2)
-    @Test
-    void testDataBase() {
-        Contact contact = new Contact();
-        contact.setAddress("Jo utca 12");
-        contact.setEmail("Semmi@Semmi.com");
-        contact.setTown("Budapest");
-        contact.setPhoneNumber("36205278601");
-        contact.setZipCode("ZipCode");
-        Customer customer = new Customer();
-        customer.setPricePerKiloWatt(1_000);
-        customer.setContact(contact);
-        Meter meter = new Meter();
-        Measurement measurement = new Measurement();
-        measurement.setDateOfMeasurement(LocalDateTime.now());
-        measurement.setUsedElectricity(1337);
-        meter.addMeasurement(measurement);
-
-        customer.addMeter(meter);
-        Invoice invoice = new Invoice();
-        invoice.setMeter(meter);
-        invoice.setStatus(Status.Pending);
-        invoice.setDateOfInvoiceCreation(LocalDateTime.now());
-        invoice.setUsedElectricity(measurement.getUsedElectricity());
-        invoice.setDebt(customer.getPricePerKiloWatt()*measurement.getUsedElectricity());
-        invoice.setPricePerKiloWatt(customer.getPricePerKiloWatt());
-        customer.addInvoice(invoice);
-        customerRepository.save(customer);
-        meterRepository.save(meter);
-        invoiceRepository.save(invoice);
-        customerDetailsService.addMeterToCustomerByUserId(new Meter(),customer.getId());
-    }
+//
+//    @Test
+//    void testDataBase() {
+//        Contact contact = new Contact();
+//        contact.setAddress("Jo utca 12");
+//        contact.setEmail("Semmi@Semmi.com");
+//        contact.setTown("Budapest");
+//        contact.setPhoneNumber("36205278601");
+//        contact.setZipCode("ZipCode");
+//        Customer customer = new Customer();
+//        customer.setPricePerKiloWatt(1_000);
+//        customer.setContact(contact);
+//        Meter meter = new Meter();
+//        Measurement measurement = new Measurement();
+//        measurement.setDateOfMeasurement(LocalDateTime.now());
+//        measurement.setUsedElectricity(1337);
+//        meter.addMeasurement(measurement);
+//
+//        customer.addMeter(meter);
+//        Invoice invoice = new Invoice();
+//        invoice.setMeter(meter);
+//        invoice.setStatus(Status.Pending);
+//        invoice.setDateOfInvoiceCreation(LocalDateTime.now());
+//        invoice.setBilled_electricity(measurement.getUsedElectricity());
+//        invoice.setDebt(customer.getPricePerKiloWatt()*measurement.getUsedElectricity());
+//        invoice.setPricePerKiloWatt(customer.getPricePerKiloWatt());
+//        customer.addInvoice(invoice);
+//        customerRepository.save(customer);
+//        meterRepository.save(meter);
+//        invoiceRepository.save(invoice);
+//        customerDetailsService.addMeterToCustomerByUserId(new Meter(),customer.getId());
+//    }
 
     @Test
     void nothing() {

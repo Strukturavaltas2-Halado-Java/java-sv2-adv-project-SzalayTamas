@@ -20,7 +20,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "customer_id")
     private Long id;
-    @OneToOne(cascade = CascadeType.PERSIST , mappedBy = "customer")
+    @OneToOne(mappedBy = "customer")
     private Meter meter;
     @OneToMany(mappedBy = "customer")
     private List<Invoice> invoices = new LinkedList<>();

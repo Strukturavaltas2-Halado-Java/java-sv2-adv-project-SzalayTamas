@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
@@ -32,6 +33,7 @@ public class BillingMeterService {
     public List<InvoiceDto> findAllInvoice() {
         return mapper.toInvoiceDto(invoiceRepository.findAll());
     }
+
     @Transactional
     public MeterDto createMeterForCustomerById(CreateMeterCommand command) {
         Customer customer = customerRepository.findById(command.getUserId()).orElseThrow(() -> new CustomerNotFoundException(command.getUserId()));
@@ -50,21 +52,21 @@ public class BillingMeterService {
 //        return mapper.toMeterDto(meterRepository.findAll());
     }
 
-    public void deleteAllInvoice() {
-        invoiceRepository.deleteAll();
-    }
-
     public void deleteInvoiceById(Long id) {
         invoiceRepository.deleteById(id);
     }
 
-    public void deleteAllMeter() {
-        meterRepository.deleteAll();
-    }
 
+    @Transactional
     public void deleteMeterById(Long id) {
+//        deleteConstraint(id);
         meterRepository.deleteById(id);
     }
+
+//    private void deleteConstraint(Long id) {
+//        Meter meter = meterRepository.findById(id).orElseThrow(() -> new MeterNotFoundException(id));
+//        meter.setCustomer(null);
+//    }
 
     @Transactional
     public Long updateStatusOfTheInvoice(Long id, UpdateInvoiceStatusCommand command) {
@@ -124,5 +126,13 @@ public class BillingMeterService {
         if (highestMeasurement > command.getUsedElectricity() || latestMeasurement.isAfter(command.getDateOfMeasurement())) {
             throw new IllegalMeasurementException();
         }
+    }
+
+    public void deleteAllInvoice() {
+        invoiceRepository.deleteAll();
+    }
+
+    public void deleteAllMeter() {
+        meterRepository.deleteAll();
     }
 }
