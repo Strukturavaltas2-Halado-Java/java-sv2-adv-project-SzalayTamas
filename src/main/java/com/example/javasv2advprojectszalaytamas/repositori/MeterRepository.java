@@ -12,8 +12,10 @@ import java.util.Optional;
 @Repository
 public interface MeterRepository extends JpaRepository<Meter, Long> {
     List<Meter> findAllByCustomerId(Long id);
+
     @Query("select distinct c from Meter c left join c.measurements")
     List<Meter> findAllMeterWithMeasurements();
 
     Optional<Meter> findByCustomerId(Long id);
+
 }

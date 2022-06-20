@@ -54,10 +54,10 @@ Végpontok:
 | GET          | `"/api/meter/{id}"`   | lekérdez egy mérőórát `id` alapján                                      |
 | POST          | `"/api/meter/"`   | létrehoz egy új mérőórát egy felhasználóhoz, dátummal és óra indulásiértékével.                                     |
 | POST          | `"/api/meter/{id}"`   | létrehoz egy mérést egy mérőórán `id` alapján                                      |
-| DELETE          | `"/api/meter/"`   | töröl minden órát az adatbázisból                                      |
+| DELETE          | `"/api/meter/"`   | töröl minden órát az adatbázisból                                 |
 | DELETE          | `"/api/meter/{id}"`   | töröl egy órát id alapján az adatbázisból                                    |
 
-Egy órához csak egy ügyfél tartozhat és fordítva is.
+Egy órához csak egy ügyfél tartozhat és forditva is.
 Az új mérést nem lehet felvenni egy órához,ha az egy már meglévő mérés előtt készült, vagy kevesebb a mérés mint egy már szereplő adatt.
 
 ### Invoice 
@@ -71,7 +71,7 @@ A `Invoice ` entitás a következő attribútumokkal rendelkezik:
 * `debt` 
 * `dateOfInvoiceCreation`
 * `pricePerKiloWatt`
-* `billed_electricity`
+* `billedElectricity`
 
 
 
