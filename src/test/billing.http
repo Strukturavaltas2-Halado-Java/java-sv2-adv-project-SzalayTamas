@@ -1,3 +1,51 @@
+DELETE http://localhost:8080/api/meter/1
+Content-Type: application/json
+
+
+###
+DELETE http://localhost:8080/api/invoice/1
+Content-Type: application/json
+
+
+###
+DELETE http://localhost:8080/api/customer/1
+Content-Type: application/json
+
+
+###
+
+POST http://localhost:8080/api/invoice
+Content-Type: application/json
+
+{
+  "customerId": 1,
+  "usedElectricity": 200
+}
+
+###
+POST http://localhost:8080/api/meter
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "dateOfMeasurement": "2022-06-19T16:24:21",
+  "meterStartingUsedElectricity": 0
+}
+
+###
+POST http://localhost:8080/api/customer
+Content-Type: application/json
+
+{
+  "email": "newcustomer@fastmail.com",
+  "zipCode": "GZHD12P",
+  "address": "Szondy street 69, 2nd floor, 12th door",
+  "town": "Budapest",
+  "phoneNumber": "867895124",
+  "pricePerKiloWatt": 1000
+}
+
+###
 GET http://localhost:8080/api/invoice
 Accept: application/json
 
@@ -7,6 +55,20 @@ Accept: application/json
 
 ###
 GET http://localhost:8080/api/meter
+Accept: application/json
+
+###
+
+###
+GET http://localhost:8080/api/invoice1
+Accept: application/json
+
+###
+GET http://localhost:8080/api/customer1
+Accept: application/json
+
+###
+GET http://localhost:8080/api/meter1
 Accept: application/json
 
 ###
