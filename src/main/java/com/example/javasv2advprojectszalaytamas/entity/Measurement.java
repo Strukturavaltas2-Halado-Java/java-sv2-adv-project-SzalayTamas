@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-@Table(name = "measurements")
+//@Table(name = "measurements")
 public class Measurement {
     @Column(name = "measurement_date")
     private LocalDateTime dateOfMeasurement;

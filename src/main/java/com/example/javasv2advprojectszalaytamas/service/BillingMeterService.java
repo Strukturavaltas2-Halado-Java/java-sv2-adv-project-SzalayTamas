@@ -4,7 +4,6 @@ import com.example.javasv2advprojectszalaytamas.command.create.CreateInvoiceComm
 import com.example.javasv2advprojectszalaytamas.command.create.CreateMeterCommand;
 import com.example.javasv2advprojectszalaytamas.command.create.CreateMeterMeasurementCommand;
 import com.example.javasv2advprojectszalaytamas.command.update.UpdateInvoiceStatusCommand;
-import com.example.javasv2advprojectszalaytamas.command.update.UpdateMeterCommand;
 import com.example.javasv2advprojectszalaytamas.dto.InvoiceDto;
 import com.example.javasv2advprojectszalaytamas.dto.MeterDto;
 import com.example.javasv2advprojectszalaytamas.entity.*;
@@ -17,7 +16,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;

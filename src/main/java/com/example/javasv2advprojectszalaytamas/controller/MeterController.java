@@ -24,6 +24,7 @@ public class MeterController {
 
 
     @PostMapping()
+    @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Assign a new meter to a customer")
     public MeterDto createNewMeterForCustomerById(@Valid @RequestBody CreateMeterCommand command) {
         return billingMeterService.createMeterForCustomerById(command);

@@ -66,13 +66,15 @@ public class CustomerController {
 
     @PutMapping("/{id}/price")
     @Operation(summary = "update electricity price for customer")
-    @ApiResponse(responseCode = "200", description = "update successful")
+    @ApiResponse(responseCode = "202", description = "update successful")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateCustomersPricePerKiloWatt(@PathVariable Long id, @Valid @RequestBody UpdateCustomerPriceCommand command) {
         customerDetailsService.updateCustomersPrice(id, command);
     }
     @PutMapping("/{id}/contact")
     @Operation(summary = "update contacts for customer", description = "can update email address and phone numbers")
-    @ApiResponse(responseCode = "200", description = "update successful")
+    @ApiResponse(responseCode = "202", description = "update successful")
+    @ResponseStatus(HttpStatus.ACCEPTED)
     public void updateCustomerContactDetails(@PathVariable Long id, @Valid @RequestBody UpdateCustomerCommand command) {
         customerDetailsService.updateCustomerContactDetails(id, command);
     }
