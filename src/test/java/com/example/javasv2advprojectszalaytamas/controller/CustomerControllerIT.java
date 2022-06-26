@@ -214,6 +214,24 @@ class CustomerControllerIT {
         webTestClient.put().uri(uriBuilder -> uriBuilder.path("api/customer/{id}/contact").build(customerDto.getId()))
                 .bodyValue(new UpdateCustomerCommand("brandNewEmailAddress@fastmail.com","0630547254")).exchange()
                 .expectStatus().isAccepted();
+    }
+    @Test
+    void testCustomerUpdateFailure() {
+        webTestClient.delete().uri("api/customer").exchange();
+        CustomerDto customerDto = webTestClient
+                .post()
+                .uri("api/customer")
+                .bodyValue(new CreateCustomerCommand("EmailAddress@Gmail.com", "ZipCode123", "Szondy street 162", "Budapest", "062012345678", 1200))
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody(CustomerDto.class).value(e -> assertThat(e.getContact().getEmail()).isEqualTo("EmailAddress@Gmail.com")
+                ).returnResult().getResponseBody();
+        webTestClient.put().uri(uriBuilder -> uriBuilder.path("api/customer/{id}/price").build(customerDto.getId()))
+                .bodyValue(new UpdateCustomerPriceCommand(0)).exchange()
+                .expectStatus().isBadRequest();
 
+        webTestClient.put().uri(uriBuilder -> uriBuilder.path("api/customer/{id}/contact").build(customerDto.getId()))
+                .bodyValue(new UpdateCustomerCommand("","0630547254")).exchange()
+                .expectStatus().isBadRequest();
     }
 }
