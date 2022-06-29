@@ -4,7 +4,7 @@
 
 ## Leírás
 
-Itt le tudjátok írni, hogy mi az alapötlet, miért választottátok ezt a feladatot stb stb....
+Mindig tetszett mennyi adatot tárol rólunk a villamosszogáltató ezért válsztottam ezt a projektet, hogy olyan kihivás elé állítsam magam amiből tanulni tudok.
 
 ---
 
